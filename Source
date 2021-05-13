@@ -16,23 +16,18 @@ using namespace std;
 const int Dimension = 3;
 const int Member = 8;
 int Input[Member] = { 0 };
-//long long int Output[Member] = { 0 };
-//int Output[Member] = { 15, 1, 12, 3, 5, 6, 8, 7, 0, 10, 13, 9, 2, 4, 14, 11 };
 int Output[Member] = {7,6,1,3,4,0,2,5};
-//int Output[Member] = { 2,3,1,0 };
-//int Output[Member] = { 0 ,5 ,1 ,3 ,4 ,6 ,2, 7 };// 4 5 2 3 0 6 1 7
-//int Output[Member] = { 2 ,6 ,0 ,3 ,1 ,5 ,7 ,4 };
-int Selectbit_Neighbor[Member][Dimension] = { 0 };//³]©w¨C­Ó¦ì¸mªº¾F©~
-int AHD_Neighbor[Member][Dimension + 1] = { 0 };//³]©w¨C­Ó¦ì¸m¦Û¤v»P¾F©~
-int Selectbit_Index = 0;//¥Ø«e¥ş³¡Selectbitªº¦ì¸m
-int Switchbit_Index = 0;//¥Ø«eSwitchbitªº¦ì¸m
-int max_HMD_index[Member];//¦s³Ì¤jHMD¦ì¸m
-int max_AHD_index[Member];//¦s³Ì¤jAHD¦ì¸m
-int after_switch_AHD[Dimension] = { 0 };//¥æ´«­pºâ«áªºAHD
-int after_switch_HMD[Dimension] = { 0 };//¥æ´«­pºâ«á¥»¨­ªºHMD
-int after_switch_CTD[Dimension] = { 0 };//¥æ´«­pºâ«á¦¹Output¸òCycleªº¶ZÂ÷
-int Selectbit_Neighbor_Output[Member][Dimension + 1] = { 0 };//¦s¥Ø«eSelect bit¦Û¤v»P¾F©~¤WªºOutput
-vector<vector<int> > Total_Cycle_vec(Member);//Cycleªí
+int Selectbit_Neighbor[Member][Dimension] = { 0 };//è¨­å®šæ¯å€‹ä½ç½®çš„é„°å±…
+int AHD_Neighbor[Member][Dimension + 1] = { 0 };//è¨­å®šæ¯å€‹ä½ç½®è‡ªå·±èˆ‡é„°å±…
+int Selectbit_Index = 0;//ç›®å‰å…¨éƒ¨Selectbitçš„ä½ç½®
+int Switchbit_Index = 0;//ç›®å‰Switchbitçš„ä½ç½®
+int max_HMD_index[Member];//å­˜æœ€å¤§HMDä½ç½®
+int max_AHD_index[Member];//å­˜æœ€å¤§AHDä½ç½®
+int after_switch_AHD[Dimension] = { 0 };//äº¤æ›è¨ˆç®—å¾Œçš„AHD
+int after_switch_HMD[Dimension] = { 0 };//äº¤æ›è¨ˆç®—å¾Œæœ¬èº«çš„HMD
+int after_switch_CTD[Dimension] = { 0 };//äº¤æ›è¨ˆç®—å¾Œæ­¤Outputè·ŸCycleçš„è·é›¢
+int Selectbit_Neighbor_Output[Member][Dimension + 1] = { 0 };//å­˜ç›®å‰Select bitè‡ªå·±èˆ‡é„°å±…ä¸Šçš„Output
+vector<vector<int> > Total_Cycle_vec(Member);//Cycleè¡¨
 int Selectbit_in_Cycle_Index[2] = { 0 };
 int Switchbit_in_Cycle_Index[2] = { 0 };
 
@@ -75,7 +70,7 @@ void Initial()
 		AHD_Neighbor[i][0] = Input[i];
 	}
 }
-int HMD(int x, int y)//­pºâ¥Ø«eHMD
+int HMD(int x, int y)//è¨ˆç®—ç›®å‰HMD
 {
 	int a = x ^ y, count = 0;
 	while (a != 0)
@@ -85,7 +80,7 @@ int HMD(int x, int y)//­pºâ¥Ø«eHMD
 	}
 	return count;
 }
-int THD(long long int temp_HMD[])//­pºâ¥Ø«eTHD
+int THD(long long int temp_HMD[])//è¨ˆç®—ç›®å‰THD
 {
 	int THD = 0;
 	for (int i = 0; i < Member; i++)
@@ -149,7 +144,7 @@ void Cycle()
 	{
 		if (Total_Cycle_vec[i].size() > 1)
 		{
-			cout << endl << "¥Ø«eªºCycle¬°¡G";
+			cout << endl << "ç›®å‰çš„Cycleç‚ºï¼š";
 
 			for (int j = 0; j < Total_Cycle_vec[i].size(); j++)
 			{
@@ -167,7 +162,7 @@ void Mix_or_Cut_CycleTable()
 	{
 		if (Select_find == false)
 		{
-			auto it = find(Total_Cycle_vec[i].begin(), Total_Cycle_vec[i].end(), Output[Selectbit_Index]); // §ä¨ìSelectbit¦bTotal_Cycle_vec¸Ìªº¦ì¸m
+			auto it = find(Total_Cycle_vec[i].begin(), Total_Cycle_vec[i].end(), Output[Selectbit_Index]); // æ‰¾åˆ°Selectbitåœ¨Total_Cycle_vecè£¡çš„ä½ç½®
 			if (it != Total_Cycle_vec[i].end())
 			{
 				Selectbit_in_Cycle_Index[0] = i;
@@ -177,7 +172,7 @@ void Mix_or_Cut_CycleTable()
 		}
 		if (Switch_find == false)
 		{
-			auto it = find(Total_Cycle_vec[i].begin(), Total_Cycle_vec[i].end(), Output[Switchbit_Index]); // §ä¨ì­n¥æ´«ªº¤H¦bTotal_Cycle_vec¸Ìªº¦ì¸m
+			auto it = find(Total_Cycle_vec[i].begin(), Total_Cycle_vec[i].end(), Output[Switchbit_Index]); // æ‰¾åˆ°è¦äº¤æ›çš„äººåœ¨Total_Cycle_vecè£¡çš„ä½ç½®
 			if (it != Total_Cycle_vec[i].end())
 			{
 				Switchbit_in_Cycle_Index[0] = i;
@@ -191,9 +186,9 @@ void Mix_or_Cut_CycleTable()
 		}
 	}
 
-	if (Selectbit_in_Cycle_Index[0] != Switchbit_in_Cycle_Index[0]) //¦X¨ÖCycle
+	if (Selectbit_in_Cycle_Index[0] != Switchbit_in_Cycle_Index[0]) //åˆä½µCycle
 	{
-		if (Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].size() >= Total_Cycle_vec[Switchbit_in_Cycle_Index[0]].size())//­YSelectªºCycleªø«×¤ñSwitchªºCycleªø«×ªø©Î¬Ûµ¥
+		if (Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].size() >= Total_Cycle_vec[Switchbit_in_Cycle_Index[0]].size())//è‹¥Selectçš„Cycleé•·åº¦æ¯”Switchçš„Cycleé•·åº¦é•·æˆ–ç›¸ç­‰
 		{
 			vector<int> temp_cycle;
 
@@ -201,7 +196,7 @@ void Mix_or_Cut_CycleTable()
 
 			temp_cycle.assign(Total_Cycle_vec[Switchbit_in_Cycle_Index[0]].begin() + Switchbit_in_Cycle_Index[1], Total_Cycle_vec[Switchbit_in_Cycle_Index[0]].end());
 
-			if (Switchbit_in_Cycle_Index[1] != 0) //­Y¤£¬O±q²Ä¤@­Ó¶}©l
+			if (Switchbit_in_Cycle_Index[1] != 0) //è‹¥ä¸æ˜¯å¾ç¬¬ä¸€å€‹é–‹å§‹
 			{
 				for (auto it = Total_Cycle_vec[Switchbit_in_Cycle_Index[0]].begin(); it < Total_Cycle_vec[Switchbit_in_Cycle_Index[0]].begin() + Switchbit_in_Cycle_Index[1]; it++)
 				{
@@ -214,7 +209,7 @@ void Mix_or_Cut_CycleTable()
 			Total_Cycle_vec[Switchbit_in_Cycle_Index[0]].clear();
 
 		}
-		else if (Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].size() < Total_Cycle_vec[Switchbit_in_Cycle_Index[0]].size())//­YSelectªºCycleªø«×¤ñSwitchªºCycleªø«×µu
+		else if (Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].size() < Total_Cycle_vec[Switchbit_in_Cycle_Index[0]].size())//è‹¥Selectçš„Cycleé•·åº¦æ¯”Switchçš„Cycleé•·åº¦çŸ­
 		{
 			vector<int> temp_cycle;
 
@@ -222,7 +217,7 @@ void Mix_or_Cut_CycleTable()
 
 			temp_cycle.assign(Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Selectbit_in_Cycle_Index[1], Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].end());
 
-			if (Selectbit_in_Cycle_Index[1] != 0) //­Y¤£¬O±q²Ä¤@­Ó¶}©l
+			if (Selectbit_in_Cycle_Index[1] != 0) //è‹¥ä¸æ˜¯å¾ç¬¬ä¸€å€‹é–‹å§‹
 			{
 				for (auto it = Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin(); it < Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Selectbit_in_Cycle_Index[1]; it++)
 				{
@@ -236,7 +231,7 @@ void Mix_or_Cut_CycleTable()
 
 		}
 	}
-	else if (Selectbit_in_Cycle_Index[0] == Switchbit_in_Cycle_Index[0])//¤À³ÎCycle
+	else if (Selectbit_in_Cycle_Index[0] == Switchbit_in_Cycle_Index[0])//åˆ†å‰²Cycle
 	{
 		if (Selectbit_in_Cycle_Index[1] < Switchbit_in_Cycle_Index[1])
 		{
@@ -245,11 +240,11 @@ void Mix_or_Cut_CycleTable()
 				if (Total_Cycle_vec[i].empty())
 				{
 
-					Total_Cycle_vec[i].assign(Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Selectbit_in_Cycle_Index[1], Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Switchbit_in_Cycle_Index[1]);//±NSelectªºOutput¨ìSwitchªºOutput¤¤¶¡ªº¤¸¯À©ñ¨ìªÅªºVector¸Ì
+					Total_Cycle_vec[i].assign(Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Selectbit_in_Cycle_Index[1], Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Switchbit_in_Cycle_Index[1]);//å°‡Selectçš„Outputåˆ°Switchçš„Outputä¸­é–“çš„å…ƒç´ æ”¾åˆ°ç©ºçš„Vectorè£¡
 					break;
 				}
 			}
-			Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].erase(Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Selectbit_in_Cycle_Index[1], Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Switchbit_in_Cycle_Index[1]);//²M°£¨ú¨«ªº¤¸¯À
+			Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].erase(Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Selectbit_in_Cycle_Index[1], Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Switchbit_in_Cycle_Index[1]);//æ¸…é™¤å–èµ°çš„å…ƒç´ 
 		}
 		else if (Switchbit_in_Cycle_Index[1] < Selectbit_in_Cycle_Index[1])
 		{
@@ -258,11 +253,11 @@ void Mix_or_Cut_CycleTable()
 				if (Total_Cycle_vec[i].empty())
 				{
 
-					Total_Cycle_vec[i].assign(Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Switchbit_in_Cycle_Index[1], Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + (Selectbit_in_Cycle_Index[1]));//±NSelectªºOutput¨ìSwitchªºOutput¤¤¶¡ªº¤¸¯À©ñ¨ìªÅªºVector¸Ì
+					Total_Cycle_vec[i].assign(Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Switchbit_in_Cycle_Index[1], Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + (Selectbit_in_Cycle_Index[1]));//å°‡Selectçš„Outputåˆ°Switchçš„Outputä¸­é–“çš„å…ƒç´ æ”¾åˆ°ç©ºçš„Vectorè£¡
 					break;
 				}
 			}
-			Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].erase(Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Switchbit_in_Cycle_Index[1], Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + (Selectbit_in_Cycle_Index[1]));//²M°£¨ú¨«ªº¤¸¯À
+			Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].erase(Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Switchbit_in_Cycle_Index[1], Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + (Selectbit_in_Cycle_Index[1]));//æ¸…é™¤å–èµ°çš„å…ƒç´ 
 		}
 	}
 
@@ -271,7 +266,7 @@ void Mix_or_Cut_CycleTable()
 	{
 		if (Total_Cycle_vec[i].size() > 1)
 		{
-			cout << endl << "¥Ø«eªºCycle¬°¡G";
+			cout << endl << "ç›®å‰çš„Cycleç‚ºï¼š";
 
 			for (int j = 0; j < Total_Cycle_vec[i].size(); j++)
 			{
@@ -291,7 +286,7 @@ void ECTD(int& Selectbit_Index)
 
 	for (int i = 0; i < Total_Cycle_vec.size(); i++)
 	{
-		auto it = find(Total_Cycle_vec[i].begin(), Total_Cycle_vec[i].end(), Output[Selectbit_Index]); // §ä¨ìSelectbit¦bTotal_Cycle_vec¸Ìªº¦ì¸m
+		auto it = find(Total_Cycle_vec[i].begin(), Total_Cycle_vec[i].end(), Output[Selectbit_Index]); // æ‰¾åˆ°Selectbitåœ¨Total_Cycle_vecè£¡çš„ä½ç½®
 		if (it != Total_Cycle_vec[i].end())
 		{
 			Selectbit_in_Cycle_Index[0] = i;
@@ -303,7 +298,7 @@ void ECTD(int& Selectbit_Index)
 	{
 		for (int j = 0; j < Total_Cycle_vec.size(); j++)
 		{
-			auto it = find(Total_Cycle_vec[j].begin(), Total_Cycle_vec[j].end(), Output[Selectbit_Neighbor[Selectbit_Index][i]]); // §ä¨ì­n¥æ´«ªº¤H¦bTotal_Cycle_vec¸Ìªº¦ì¸m
+			auto it = find(Total_Cycle_vec[j].begin(), Total_Cycle_vec[j].end(), Output[Selectbit_Neighbor[Selectbit_Index][i]]); // æ‰¾åˆ°è¦äº¤æ›çš„äººåœ¨Total_Cycle_vecè£¡çš„ä½ç½®
 
 			if (it != Total_Cycle_vec[j].end())
 			{
@@ -312,26 +307,26 @@ void ECTD(int& Selectbit_Index)
 				break;
 			}
 		}
-		if (Selectbit_in_Cycle_Index[0] != Switchbit_in_Cycle_Index[0]) //¦X¨ÖCycle
+		if (Selectbit_in_Cycle_Index[0] != Switchbit_in_Cycle_Index[0]) //åˆä½µCycle
 		{
 			for (auto it = Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin(); it < Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].end(); it++)
 			{
 				if (*it != Selectbit_Neighbor[Selectbit_Index][i])
 				{
-					after_switch_CTD[i] += HMD(Selectbit_Neighbor[Selectbit_Index][i], *it);//­pºâCTD
+					after_switch_CTD[i] += HMD(Selectbit_Neighbor[Selectbit_Index][i], *it);//è¨ˆç®—CTD
 				}
 			}
 			for (auto it = Total_Cycle_vec[Switchbit_in_Cycle_Index[0]].begin(); it < Total_Cycle_vec[Switchbit_in_Cycle_Index[0]].end(); it++)
 			{
 				if (*it != Selectbit_Neighbor[Selectbit_Index][i])
 				{
-					after_switch_CTD[i] += HMD(Selectbit_Neighbor[Selectbit_Index][i], *it);//­pºâCTD
+					after_switch_CTD[i] += HMD(Selectbit_Neighbor[Selectbit_Index][i], *it);//è¨ˆç®—CTD
 				}
 			}
 		}
-		else if (Selectbit_in_Cycle_Index[0] == Switchbit_in_Cycle_Index[0])//¤À³ÎCycle
+		else if (Selectbit_in_Cycle_Index[0] == Switchbit_in_Cycle_Index[0])//åˆ†å‰²Cycle
 		{
-			if (Selectbit_in_Cycle_Index[1] < Switchbit_in_Cycle_Index[1])//ºâ¤¤¶¡ªº¤¸¯À
+			if (Selectbit_in_Cycle_Index[1] < Switchbit_in_Cycle_Index[1])//ç®—ä¸­é–“çš„å…ƒç´ 
 			{
 				for (auto it = Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Selectbit_in_Cycle_Index[1]; it < Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Switchbit_in_Cycle_Index[1]; it++)
 				{
@@ -341,7 +336,7 @@ void ECTD(int& Selectbit_Index)
 					}
 				}
 			}
-			else if (Switchbit_in_Cycle_Index[1] < Selectbit_in_Cycle_Index[1])//ºâSelect«á­±ªº¤¸¯À
+			else if (Switchbit_in_Cycle_Index[1] < Selectbit_in_Cycle_Index[1])//ç®—Selectå¾Œé¢çš„å…ƒç´ 
 			{
 				for (auto it = Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Selectbit_in_Cycle_Index[1]; it < Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].end(); it++)
 				{
@@ -350,7 +345,7 @@ void ECTD(int& Selectbit_Index)
 						after_switch_CTD[i] += HMD(Selectbit_Neighbor[Selectbit_Index][i], *it);
 					}
 				}
-				if (Switchbit_in_Cycle_Index[1] != 0) //¥[¤WºâSwitch«e­±ªº¤¸¯À
+				if (Switchbit_in_Cycle_Index[1] != 0) //åŠ ä¸Šç®—Switchå‰é¢çš„å…ƒç´ 
 				{
 					for (auto it = Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin(); it < Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Switchbit_in_Cycle_Index[1]; it++)
 					{
@@ -372,9 +367,9 @@ void After_Switch_AHD(long long int old_HMD[])
 	{
 		after_switch_AHD[i] = 0;
 	}
-	for (int i = 0; i < Dimension; i++)//¥Ø«e­n¥æ´«ªºbits
+	for (int i = 0; i < Dimension; i++)//ç›®å‰è¦äº¤æ›çš„bits
 	{
-		//¥æ´«¨Ã­pºâHMD	
+		//äº¤æ›ä¸¦è¨ˆç®—HMD	
 		for (int j = 0; j < Dimension; j++)
 		{
 			if (j != i)
@@ -386,7 +381,7 @@ void After_Switch_AHD(long long int old_HMD[])
 		Output[Selectbit_Index] = Output[Selectbit_Neighbor[Selectbit_Index][i]];
 		Output[Selectbit_Neighbor[Selectbit_Index][i]] = temp_output;
 
-		after_switch_HMD[i] = HMD(Selectbit_Index, Output[Selectbit_Index]);//¦s¥»¨­¸ò¾F©~¥æ´«ºâ§¹ªºHMD
+		after_switch_HMD[i] = HMD(Selectbit_Index, Output[Selectbit_Index]);//å­˜æœ¬èº«è·Ÿé„°å±…äº¤æ›ç®—å®Œçš„HMD
 		temp_HMD[i] = HMD(Selectbit_Neighbor[Selectbit_Index][i], Output[Selectbit_Neighbor[Selectbit_Index][i]]);
 
 		temp_output = Output[Selectbit_Index];
@@ -400,7 +395,7 @@ void After_Switch_AHD(long long int old_HMD[])
 		after_switch_AHD[i] += after_switch_HMD[i];
 	}
 }
-int Max_HMD(long long int temp_HMD[], int count, int& max_HMD, int& max_HMD_number)//­pºâ¥Ø«e³Ì¤jHMD»P¦ì¸m
+int Max_HMD(long long int temp_HMD[], int count, int& max_HMD, int& max_HMD_number)//è¨ˆç®—ç›®å‰æœ€å¤§HMDèˆ‡ä½ç½®
 {
 	int temp_max = temp_HMD[0];
 	for (int i = 0; i < count; i++)
@@ -423,7 +418,7 @@ int Max_HMD(long long int temp_HMD[], int count, int& max_HMD, int& max_HMD_numb
 	}
 	return max_HMD_count;
 }
-int AHD(long long int temp_HMD[], int input)//­pºâAHD
+int AHD(long long int temp_HMD[], int input)//è¨ˆç®—AHD
 {
 	int AHD = 0;
 	for (int i = 0; i < Dimension + 1; i++)
@@ -432,7 +427,7 @@ int AHD(long long int temp_HMD[], int input)//­pºâAHD
 	}
 	return AHD;
 }
-int Max_AHD(long long int temp_AHD[], int count, int& max_AHD, int& max_AHD_number)//­pºâ³Ì¤jAHDªº¼Æ¶q»P¦ì¸m	
+int Max_AHD(long long int temp_AHD[], int count, int& max_AHD, int& max_AHD_number)//è¨ˆç®—æœ€å¤§AHDçš„æ•¸é‡èˆ‡ä½ç½®	
 {
 	int temp_max = temp_AHD[0];
 	for (int i = 0; i < count; i++)
@@ -522,7 +517,7 @@ void Tabu(vector<pair<int, int> >& pair_dead_path, vector<Path>& path_vec)
 		}
 	}
 }
-void Bit_Switch()//¨Ï¥Î¿ï¾Üªº¸ô®|¥æ´«
+void Bit_Switch()//ä½¿ç”¨é¸æ“‡çš„è·¯å¾‘äº¤æ›
 {
 	Mix_or_Cut_CycleTable();
 
@@ -536,11 +531,11 @@ void Select_bit_home_and_restore(int Selectbit_Index, int& Select_bit_home_gate_
 {
 	for (int i = 0; i < Member; i++)
 	{
-		temp_HMD[i] = HMD(Input[i], Output[i]);//¼È¦sHMD
+		temp_HMD[i] = HMD(Input[i], Output[i]);//æš«å­˜HMD
 	}
 	if (temp_HMD[Selectbit_Index] > 0)
 	{
-		/*---------------------------------------------¿é¥X¹q¸ô----------------------------------------*/
+		/*---------------------------------------------è¼¸å‡ºé›»è·¯----------------------------------------*/
 		/*int x_binary[Dimension];
 		int y_binary[Dimension];
 		int different = -1;
@@ -553,7 +548,7 @@ void Select_bit_home_and_restore(int Selectbit_Index, int& Select_bit_home_gate_
 			int y = Selectbit_Index % d / c;
 			y_binary[Dimension - i - 1] = y;
 		}
-		file_out.open("C:\\Users\\NTU\\Desktop\\¤p¥Õ_¥i°f¹q¸ô\\¥i°f¹q¸ô¹êÅç¼Æ¾Ú\\Gateªø¬Û.txt", ios::app);
+		file_out.open("C:\\Users\\NTU\\Desktop\\å°ç™½_å¯é€†é›»è·¯\\å¯é€†é›»è·¯å¯¦é©—æ•¸æ“š\\Gateé•·ç›¸.txt", ios::app);
 		file_out << endl;
 		for (int i = 0; i < Dimension; i++)
 		{
@@ -596,11 +591,11 @@ void Select_bit_home_and_restore(int Selectbit_Index, int& Select_bit_home_gate_
 			}
 		}
 		file_out.close();*/
-		/*---------------------------------------------¿é¥X¹q¸ô----------------------------------------*/
+		/*---------------------------------------------è¼¸å‡ºé›»è·¯----------------------------------------*/
 
 		for (int i = 0; i < Total_Cycle_vec.size(); i++)
 		{
-			vector<int>::iterator it = find(Total_Cycle_vec[i].begin(), Total_Cycle_vec[i].end(), Output[Selectbit_Index]); // §ä¨ìSelectbit¦bTotal_Cycle_vec¸Ìªº¦ì¸m
+			vector<int>::iterator it = find(Total_Cycle_vec[i].begin(), Total_Cycle_vec[i].end(), Output[Selectbit_Index]); // æ‰¾åˆ°Selectbitåœ¨Total_Cycle_vecè£¡çš„ä½ç½®
 			if (it != Total_Cycle_vec[i].end())
 			{
 				Selectbit_in_Cycle_Index[0] = i;
@@ -614,19 +609,19 @@ void Select_bit_home_and_restore(int Selectbit_Index, int& Select_bit_home_gate_
 		{
 			if (Total_Cycle_vec[i].empty())
 			{
-				Total_Cycle_vec[i].insert(Total_Cycle_vec[i].begin(), Total_Cycle_vec[Selectbit_in_Cycle_Index[0]][Selectbit_in_Cycle_Index[1]]);//±Nª½±µ¦^®aªºOutput©ñ¨ìªÅªºVector¸Ì
+				Total_Cycle_vec[i].insert(Total_Cycle_vec[i].begin(), Total_Cycle_vec[Selectbit_in_Cycle_Index[0]][Selectbit_in_Cycle_Index[1]]);//å°‡ç›´æ¥å›å®¶çš„Outputæ”¾åˆ°ç©ºçš„Vectorè£¡
 				break;
 			}
 		}
 
-		Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].erase(Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Selectbit_in_Cycle_Index[1]);//²M°£¨ú¨«ªº¤¸¯À
+		Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].erase(Total_Cycle_vec[Selectbit_in_Cycle_Index[0]].begin() + Selectbit_in_Cycle_Index[1]);//æ¸…é™¤å–èµ°çš„å…ƒç´ 
 
 #if DEBUG
 		for (int i = 0; i < Member; i++)
 		{
 			if (Total_Cycle_vec[i].size() > 1)
 			{
-				cout << endl << "¥Ø«eªºCycle¬°¡G";
+				cout << endl << "ç›®å‰çš„Cycleç‚ºï¼š";
 
 				for (int j = 0; j < Total_Cycle_vec[i].size(); j++)
 				{
@@ -647,17 +642,17 @@ void Select_bit_home_and_restore(int Selectbit_Index, int& Select_bit_home_gate_
 	}
 	for (int i = 0; i < Member; i++)
 	{
-		temp_HMD[i] = HMD(Input[i], Output[i]);//¼È¦sHMD
+		temp_HMD[i] = HMD(Input[i], Output[i]);//æš«å­˜HMD
 	}
 }
 void Save_Selectbit_Neighbor_Output()
 {
 #if DEBUG
-	cout << "¥æ´««eSelect bit " << Selectbit_Index << "¦Û¤v»P¾F©~¤WªºOutput¡G";
+	cout << "äº¤æ›å‰Select bit " << Selectbit_Index << "è‡ªå·±èˆ‡é„°å±…ä¸Šçš„Outputï¼š";
 #endif
 	for (int i = 0; i < Dimension + 1; i++)
 	{
-		Selectbit_Neighbor_Output[Selectbit_Index][i] = Output[AHD_Neighbor[Selectbit_Index][i]];//¥Ø«e¿ï¾ÜSwitch bit¾F©~¤WªºOutput
+		Selectbit_Neighbor_Output[Selectbit_Index][i] = Output[AHD_Neighbor[Selectbit_Index][i]];//ç›®å‰é¸æ“‡Switch bité„°å±…ä¸Šçš„Output
 	}
 
 	sort(Selectbit_Neighbor_Output[Selectbit_Index], Selectbit_Neighbor_Output[Selectbit_Index] + Dimension + 1);
@@ -673,7 +668,7 @@ void Selectbit_same_neighbor_or_not(vector<pair<int, int> >& dead_path, int dead
 {
 	bool old_path = true;
 #if DEBUG
-	cout << "¤ñ¹ï¦ì¸m" << Selectbit_Index << "ªº¾F©~¤WªºOutput¬O§_¬Û¦P¡G";
+	cout << "æ¯”å°ä½ç½®" << Selectbit_Index << "çš„é„°å±…ä¸Šçš„Outputæ˜¯å¦ç›¸åŒï¼š";
 #endif
 
 	int temp_AHD_Neighbor_Output[Dimension + 1];
@@ -685,7 +680,7 @@ void Selectbit_same_neighbor_or_not(vector<pair<int, int> >& dead_path, int dead
 
 	sort(temp_AHD_Neighbor_Output, temp_AHD_Neighbor_Output + Dimension + 1);
 
-	for (int j = 0; j < Dimension + 1; j++) //¤ñ¹ï¦º¸ô«e¸ò¦º¸ô«á¿ï¾ÜSwitch bit¾F©~¤WªºOutput¬O§_¤@¼Ë
+	for (int j = 0; j < Dimension + 1; j++) //æ¯”å°æ­»è·¯å‰è·Ÿæ­»è·¯å¾Œé¸æ“‡Switch bité„°å±…ä¸Šçš„Outputæ˜¯å¦ä¸€æ¨£
 	{
 #if DEBUG
 		cout << "(" << Selectbit_Neighbor_Output[Selectbit_Index][j] << "," << temp_AHD_Neighbor_Output[j] << ")";
@@ -696,17 +691,17 @@ void Selectbit_same_neighbor_or_not(vector<pair<int, int> >& dead_path, int dead
 			break;
 		}
 	}
-	if (old_path == true)//­YµL·s¸ô
+	if (old_path == true)//è‹¥ç„¡æ–°è·¯
 	{
-		dead_path.push_back(make_pair(Selectbit_Index, Switchbit_Index));//¦s¦º¸ôªº¸ô®|
+		dead_path.push_back(make_pair(Selectbit_Index, Switchbit_Index));//å­˜æ­»è·¯çš„è·¯å¾‘
 #if DEBUG
-		cout << endl << "¥Ø«e¦@¦³¡G" << dead_path.size() << "±ø¦º¸ô";
+		cout << endl << "ç›®å‰å…±æœ‰ï¼š" << dead_path.size() << "æ¢æ­»è·¯";
 #endif
 		dead_path_count[Selectbit_Index]++;
 		dead_path_count[Switchbit_Index]++;
 	}
 }
-void Clear_Selectbit_Dead_Path(int Selectbit_Index, int Switchbit_Index, vector<pair<int, int> >& dead_path) //Select bitª½±µ¦^®a®É¡A§R°£¬ö¿ı¸Óbit¦º¸ôªº¸ô®|
+void Clear_Selectbit_Dead_Path(int Selectbit_Index, int Switchbit_Index, vector<pair<int, int> >& dead_path) //Select bitç›´æ¥å›å®¶æ™‚ï¼Œåˆªé™¤ç´€éŒ„è©²bitæ­»è·¯çš„è·¯å¾‘
 {
 	for (int i = 0; i < dead_path.size(); i++)
 	{
@@ -718,7 +713,7 @@ void Clear_Selectbit_Dead_Path(int Selectbit_Index, int Switchbit_Index, vector<
 		}
 	}
 }
-void Clear_Selectbit_Repeat_Dead_Path(int Selectbit_Index, int Switchbit_Index, vector<pair<int, int> >& repeat_dead_path) //Select bitª½±µ¦^®a®É¡A§R°£¬ö¿ı¸Óbit­«½Æ¸T§Òªº¸ô®|
+void Clear_Selectbit_Repeat_Dead_Path(int Selectbit_Index, int Switchbit_Index, vector<pair<int, int> >& repeat_dead_path) //Select bitç›´æ¥å›å®¶æ™‚ï¼Œåˆªé™¤ç´€éŒ„è©²bité‡è¤‡ç¦å¿Œçš„è·¯å¾‘
 {
 	for (int i = 0; i < repeat_dead_path.size(); i++)
 	{
@@ -735,7 +730,7 @@ void Clear_Selectbit_Neighbor_Output(vector<pair<int, int> >& dead_path, int dea
 	if (!dead_path.empty())
 	{
 #if DEBUG
-		cout << endl << "¥Ø«eªº¦º¸ô¬°¡G";
+		cout << endl << "ç›®å‰çš„æ­»è·¯ç‚ºï¼š";
 		for (int i = 0; i < dead_path.size(); i++)
 		{
 			cout << "[" << dead_path[i].first << "," << dead_path[i].second << "]";
@@ -745,7 +740,7 @@ void Clear_Selectbit_Neighbor_Output(vector<pair<int, int> >& dead_path, int dea
 		{
 			bool old_path = true;
 #if DEBUG
-			cout << endl << "¤ñ¹ï¦ì¸m" << dead_path[i].first << "ªº¾F©~¤WªºOutput¬O§_¬Û¦P¡G";
+			cout << endl << "æ¯”å°ä½ç½®" << dead_path[i].first << "çš„é„°å±…ä¸Šçš„Outputæ˜¯å¦ç›¸åŒï¼š";
 #endif
 			int temp_AHD_Neighbor_Output[Dimension + 1];
 			for (int j = 0; j < Dimension + 1; j++)
@@ -755,7 +750,7 @@ void Clear_Selectbit_Neighbor_Output(vector<pair<int, int> >& dead_path, int dea
 
 			sort(temp_AHD_Neighbor_Output, temp_AHD_Neighbor_Output + Dimension + 1);
 
-			for (int j = 0; j < Dimension + 1; j++) //¤ñ¹ï¦º¸ô«e¸ò¦º¸ô«á¿ï¾ÜSwitch bit¾F©~¤WªºOutput¬O§_¤@¼Ë
+			for (int j = 0; j < Dimension + 1; j++) //æ¯”å°æ­»è·¯å‰è·Ÿæ­»è·¯å¾Œé¸æ“‡Switch bité„°å±…ä¸Šçš„Outputæ˜¯å¦ä¸€æ¨£
 			{
 #if DEBUG
 				cout << "(" << Selectbit_Neighbor_Output[dead_path[i].first][j] << "," << temp_AHD_Neighbor_Output[j] << ")";
@@ -766,10 +761,10 @@ void Clear_Selectbit_Neighbor_Output(vector<pair<int, int> >& dead_path, int dea
 					break;
 				}
 			}
-			if (old_path == false)//­Y¦³·s¸ô
+			if (old_path == false)//è‹¥æœ‰æ–°è·¯
 			{
 #if DEBUG
-				cout << endl << "¦]¬°¦ì¸m" << dead_path[i].first << "¦³·s¸ô¡A©Ò¥H[" << dead_path[i].first << "," << dead_path[i].second << "]¸Ñ°£¸T§Ò";
+				cout << endl << "å› ç‚ºä½ç½®" << dead_path[i].first << "æœ‰æ–°è·¯ï¼Œæ‰€ä»¥[" << dead_path[i].first << "," << dead_path[i].second << "]è§£é™¤ç¦å¿Œ";
 #endif
 
 				dead_path_count[dead_path[i].first]--;
@@ -788,11 +783,11 @@ void Update_Selectbit_Neighbor_Output(vector<pair<int, int> >& all_path)
 	if (!all_path.empty())
 	{
 #if DEBUG
-		cout << endl << "Select bit " << all_path[0].first << "¦Û¤v»P¾F©~¤WªºOutputÅÜ¬°¡G";
+		cout << endl << "Select bit " << all_path[0].first << "è‡ªå·±èˆ‡é„°å±…ä¸Šçš„Outputè®Šç‚ºï¼š";
 #endif
 		for (int i = 0; i < Dimension + 1; i++)
 		{
-			Selectbit_Neighbor_Output[all_path[0].first][i] = Output[AHD_Neighbor[all_path[0].first][i]];//¥Ø«e¿ï¾ÜSwitch bit¾F©~¤WªºOutput
+			Selectbit_Neighbor_Output[all_path[0].first][i] = Output[AHD_Neighbor[all_path[0].first][i]];//ç›®å‰é¸æ“‡Switch bité„°å±…ä¸Šçš„Output
 		}
 
 		sort(Selectbit_Neighbor_Output[all_path[0].first], Selectbit_Neighbor_Output[all_path[0].first] + Dimension + 1);
@@ -811,11 +806,11 @@ void Update_Selectbit_Neighbor_Output(vector<pair<int, int> >& all_path)
 				continue;
 			}
 #if DEBUG
-			cout << endl << "Select bit " << all_path[i].first << "¦Û¤v»P¾F©~¤WªºOutputÅÜ¬°¡G";
+			cout << endl << "Select bit " << all_path[i].first << "è‡ªå·±èˆ‡é„°å±…ä¸Šçš„Outputè®Šç‚ºï¼š";
 #endif
 			for (int j = 0; j < Dimension + 1; j++)
 			{
-				Selectbit_Neighbor_Output[all_path[i].first][j] = Output[AHD_Neighbor[all_path[i].first][j]];//¥Ø«e¿ï¾ÜSwitch bit¾F©~¤WªºOutput
+				Selectbit_Neighbor_Output[all_path[i].first][j] = Output[AHD_Neighbor[all_path[i].first][j]];//ç›®å‰é¸æ“‡Switch bité„°å±…ä¸Šçš„Output
 			}
 
 			sort(Selectbit_Neighbor_Output[all_path[i].first], Selectbit_Neighbor_Output[all_path[i].first] + Dimension + 1);
@@ -829,7 +824,7 @@ void Update_Selectbit_Neighbor_Output(vector<pair<int, int> >& all_path)
 		}
 	}
 }
-void Read(ifstream& in)//ÃD¥Ø
+void Read(ifstream& in)//é¡Œç›®
 {
 	string line;
 	for (int i = 0; i < Member; i++)
@@ -837,31 +832,31 @@ void Read(ifstream& in)//ÃD¥Ø
 		in >> Output[i];
 	}
 }
-void Out_Problem(int number, ofstream& out)//¿é¥X
+void Out_Problem(int number, ofstream& out)//è¼¸å‡º
 {
-	out << "²Ä" << number + 1 << "ÃD" << ",";
+	out << "ç¬¬" << number + 1 << "é¡Œ" << ",";
 	for (int i = 0; i < Member; i++)
 	{
 		out << Output[i] << " ";
 	}
 	out << ",";
 }
-void Out_GateCount(int gate_count, ofstream& out)//¿é¥X
+void Out_GateCount(int gate_count, ofstream& out)//è¼¸å‡º
 {
 	out << gate_count;
 	out << ",";
 }
-void Out_Select_bit_home_gate_count(int Select_bit_home_gate_count, ofstream& out)//¿é¥X
+void Out_Select_bit_home_gate_count(int Select_bit_home_gate_count, ofstream& out)//è¼¸å‡º
 {
 	out << Select_bit_home_gate_count;
 	out << ",";
 }
-void Out_Best_GateCount(int best_gate_count, ofstream& out)//¿é¥X
+void Out_Best_GateCount(int best_gate_count, ofstream& out)//è¼¸å‡º
 {
 	out << best_gate_count;
 	out << ",";
 }
-void Out_Execution_Time(double  execution_time, ofstream& out)//¿é¥X
+void Out_Execution_Time(double  execution_time, ofstream& out)//è¼¸å‡º
 {
 	out << execution_time << endl;
 }
@@ -913,9 +908,8 @@ void circuit(int a, int b)
 int main()
 {
 	Initial();
-	//ifstream in("C:\\Users\\NTU\\Desktop\\¤p¥Õ_¥i°f¹q¸ô\\¥i°fÃD¥Ø\\nth_prime14_inc.txt");
+	//ifstream in("C:\\Users\\NTU\\Desktop\\å°ç™½_å¯é€†é›»è·¯\\å¯é€†é¡Œç›®\\nth_prime14_inc.txt");
 	//Read(in);
-	//vector<Select> select_vec;
 	vector<Path> path_vec;
 	vector<pair<int, int> > pair_path_vec;
 	vector<vector<int> > output_vec(Member);
@@ -936,20 +930,20 @@ int main()
 	int dead_path_count[Member] = { 0 };
 
 #if DEBUG
-	cout << "¥Ø«eªºOutput¡G     ";
+	cout << "ç›®å‰çš„Outputï¼š     ";
 	for (int i = 0; i < Member; i++)
 	{
 
-		cout << Output[i] << " ";//¦L¥X¥Ø«eOutput
+		cout << Output[i] << " ";//å°å‡ºç›®å‰Output
 
 	}
-	cout << endl << "¥Ø«e¨C­Ó¦ì¸mªºHMD¡G";
+	cout << endl << "ç›®å‰æ¯å€‹ä½ç½®çš„HMDï¼š";
 #endif
 	for (int i = 0; i < Member; i++)
 	{
-		temp_HMD[i] = HMD(Input[i], Output[i]);//¼È¦sHMD
+		temp_HMD[i] = HMD(Input[i], Output[i]);//æš«å­˜HMD
 #if DEBUG
-		cout << temp_HMD[i] << " ";//¿é¥X¥Ø«e¨C­Ó¦ì¸mªºHMD
+		cout << temp_HMD[i] << " ";//è¼¸å‡ºç›®å‰æ¯å€‹ä½ç½®çš„HMD
 #endif
 	}
 	auto Start = chrono::steady_clock::now();
@@ -962,32 +956,32 @@ int main()
 #if DEBUG ==0
 		THD(temp_HMD);
 #else
-		cout << endl << "¥Ø«eªºTHD¡G" << THD(temp_HMD);
+		cout << endl << "ç›®å‰çš„THDï¼š" << THD(temp_HMD);
 #endif
 		Clear_Selectbit_Neighbor_Output(pair_dead_path, dead_path_count, repeat_dead_path);
 
-		max_HMD_count = Max_HMD(temp_HMD, Member, max_HMD, max_index_HMD);//­pºâ³Ì¤jHMD
+		max_HMD_count = Max_HMD(temp_HMD, Member, max_HMD, max_index_HMD);//è¨ˆç®—æœ€å¤§HMD
 
 #if DEBUG
-		cout << endl << "¥Ø«e³Ì¤jHMD¡G" << max_HMD << endl;
+		cout << endl << "ç›®å‰æœ€å¤§HMDï¼š" << max_HMD << endl;
 #endif
 		for (int i = 0; i < max_HMD_count; i++)
 		{
 #if DEBUG
-			cout << "¥Ø«e³Ì¤jHMD¦ì¸m¡G" << max_HMD_index[i] << endl;
+			cout << "ç›®å‰æœ€å¤§HMDä½ç½®ï¼š" << max_HMD_index[i] << endl;
 #endif
 		}
 #if DEBUG
-		cout << "¥Ø«e³Ì¤jHMD¼Æ¶q¡G" << max_HMD_count << "­Ó" << endl;
+		cout << "ç›®å‰æœ€å¤§HMDæ•¸é‡ï¼š" << max_HMD_count << "å€‹" << endl;
 #endif
-		if (max_HMD_count == 1)//­Y³Ì¤jHMD¥u¦³¤@­Ó
+		if (max_HMD_count == 1)//è‹¥æœ€å¤§HMDåªæœ‰ä¸€å€‹
 		{
 			Selectbit_Index = max_HMD_index[0];
 			path_vec.clear();
-			After_Switch_AHD(temp_HMD);//ª½±µ­pºâ­n¥æ´«ªºSwitch Bit¸ô®|
+			After_Switch_AHD(temp_HMD);//ç›´æ¥è¨ˆç®—è¦äº¤æ›çš„Switch Bitè·¯å¾‘
 
 
-			ECTD(Selectbit_Index);//­pºâ¥æ´««á»PCylceªº¶ZÂ÷
+			ECTD(Selectbit_Index);//è¨ˆç®—äº¤æ›å¾Œèˆ‡Cylceçš„è·é›¢
 
 
 			for (int i = 0; i < Dimension; i++)
@@ -996,24 +990,24 @@ int main()
 				path_vec.push_back(p);
 			}
 
-			sort(path_vec.begin(), path_vec.end(), Compare_Path);//±Æ§Ç­pºâ«áªº¸ô®|
+			sort(path_vec.begin(), path_vec.end(), Compare_Path);//æ’åºè¨ˆç®—å¾Œçš„è·¯å¾‘
 
 #if DEBUG
-			cout << "­pºâ­n¥æ´«ªºSwitch Bit¸ô®|(AHD, CTD, HMD, ¦Û¨­¦ì¸m, ¥æ´«¦ì¸m)¡G";
+			cout << "è¨ˆç®—è¦äº¤æ›çš„Switch Bitè·¯å¾‘(AHD, CTD, HMD, è‡ªèº«ä½ç½®, äº¤æ›ä½ç½®)ï¼š";
 
 			for (int i = 0; i < Dimension; i++)
 			{
 				cout << "(" << path_vec[i].AHD << "," << path_vec[i].CTD << "," << path_vec[i].HMD << "," << path_vec[i].SelectPOS << "," << path_vec[i].SwitchPOS << ")";
 			}
 #endif
-			Switchbit_Index = path_vec[0].SwitchPOS;//¿ï±Æ§Ç«áªº³Ì¨Î¸ô®|
+			Switchbit_Index = path_vec[0].SwitchPOS;//é¸æ’åºå¾Œçš„æœ€ä½³è·¯å¾‘
 
 			bool dead_path = false;
 
 			Tabu(pair_dead_path, path_vec);
 
 		}
-		else //­Y³Ì¤jHMD¤£¥u¤@­Ó¡A«h¥ş³¡­pºâ¸ô®|
+		else //è‹¥æœ€å¤§HMDä¸åªä¸€å€‹ï¼Œå‰‡å…¨éƒ¨è¨ˆç®—è·¯å¾‘
 		{
 			Not_Only_MaxHMD = true;
 
@@ -1031,9 +1025,9 @@ int main()
 					after_switch_AHD[j] = 0;
 				}
 
-				for (int j = 0; j < Dimension; j++)//¥Ø«e­n¥æ´«ªºbits
+				for (int j = 0; j < Dimension; j++)//ç›®å‰è¦äº¤æ›çš„bits
 				{
-					//¥æ´«¨Ã­pºâHMD	
+					//äº¤æ›ä¸¦è¨ˆç®—HMD	
 					for (int k = 0; k < Dimension; k++)
 					{
 						if (k != j)
@@ -1046,7 +1040,7 @@ int main()
 					Output[max_HMD_index[i]] = Output[Selectbit_Neighbor[max_HMD_index[i]][j]];
 					Output[Selectbit_Neighbor[max_HMD_index[i]][j]] = temp_output;
 
-					after_switch_HMD[j] = HMD(max_HMD_index[i], Output[max_HMD_index[i]]);//¦s¥»¨­¸ò¾F©~¥æ´«ºâ§¹ªºHMD
+					after_switch_HMD[j] = HMD(max_HMD_index[i], Output[max_HMD_index[i]]);//å­˜æœ¬èº«è·Ÿé„°å±…äº¤æ›ç®—å®Œçš„HMD
 					temp2_HMD[j] = HMD(Selectbit_Neighbor[max_HMD_index[i]][j], Output[Selectbit_Neighbor[max_HMD_index[i]][j]]);
 
 					temp_output = Output[max_HMD_index[i]];
@@ -1061,7 +1055,7 @@ int main()
 					after_switch_AHD[j] += after_switch_HMD[j];
 				}
 
-				ECTD(max_HMD_index[i]);//­pºâ¥æ´««á»PCylceªº¶ZÂ÷
+				ECTD(max_HMD_index[i]);//è¨ˆç®—äº¤æ›å¾Œèˆ‡Cylceçš„è·é›¢
 
 				for (int j = 0; j < Dimension; j++)
 				{
@@ -1071,10 +1065,10 @@ int main()
 
 			}
 
-			sort(path_vec.begin(), path_vec.end(), Compare_Path);//±Æ§Ç­pºâ«áªº¸ô®|
+			sort(path_vec.begin(), path_vec.end(), Compare_Path);//æ’åºè¨ˆç®—å¾Œçš„è·¯å¾‘
 
 #if DEBUG
-			cout << "­pºâ­n¥æ´«ªºSwitch Bit¸ô®|(AHD, CTD, HMD, ¦Û¨­¦ì¸m, ¥æ´«¦ì¸m)¡G";
+			cout << "è¨ˆç®—è¦äº¤æ›çš„Switch Bitè·¯å¾‘(AHD, CTD, HMD, è‡ªèº«ä½ç½®, äº¤æ›ä½ç½®)ï¼š";
 
 			for (int i = 0; i < Dimension * max_HMD_count; i++)
 			{
@@ -1089,22 +1083,22 @@ int main()
 			Tabu(pair_dead_path, path_vec);
 		}
 
-		/*----------------------------------------------------------¥æ´«SwitchBit-------------------------------------------------------------------------*/
+		/*----------------------------------------------------------äº¤æ›SwitchBit-------------------------------------------------------------------------*/
 
-		/*----------------------------------------------------------§PÂ_¬O§_¦º¸ô-------------------------------------------------------------------------*/
+		/*----------------------------------------------------------åˆ¤æ–·æ˜¯å¦æ­»è·¯-------------------------------------------------------------------------*/
 
 		if (!output_vec[Selectbit_Index].empty() && !output_vec[Switchbit_Index].empty())
 		{
-			if (output_vec[Selectbit_Index].back() == Output[Switchbit_Index] && output_vec[Switchbit_Index].back() == Output[Selectbit_Index])//­«½Æ§PÂ_Output¬O§_¦³¥æ¤e
+			if (output_vec[Selectbit_Index].back() == Output[Switchbit_Index] && output_vec[Switchbit_Index].back() == Output[Selectbit_Index])//é‡è¤‡åˆ¤æ–·Outputæ˜¯å¦æœ‰äº¤å‰
 			{
 				for (int p = pair_path_vec.size() - 1; p >= 0; p--)
 				{
-					if (Selectbit_Index == pair_path_vec[p].second && Switchbit_Index == pair_path_vec[p].first)//¥æ¤e¦º¸ô
+					if (Selectbit_Index == pair_path_vec[p].second && Switchbit_Index == pair_path_vec[p].first)//äº¤å‰æ­»è·¯
 					{
 #if DEBUG
-						cout << endl << "¥Ø«e­n¥æ´«ªºSwitch Bit¸ô®|¡G" << Switchbit_Index << endl;
-						cout << "²Ä" << n++ << "¦¸¿ï¾Üªº¸ô®|¦ì¸m¡G(" << Selectbit_Index << "," << Switchbit_Index << ")" << endl;
-						cout << "¦]¬°" << "(" << pair_path_vec[p].first << "," << pair_path_vec[p].second << ")" << "(" << Selectbit_Index << "," << Switchbit_Index << ")" << "µo¥Í¥æ¤e¦º¸ô¡G" << endl;
+						cout << endl << "ç›®å‰è¦äº¤æ›çš„Switch Bitè·¯å¾‘ï¼š" << Switchbit_Index << endl;
+						cout << "ç¬¬" << n++ << "æ¬¡é¸æ“‡çš„è·¯å¾‘ä½ç½®ï¼š(" << Selectbit_Index << "," << Switchbit_Index << ")" << endl;
+						cout << "å› ç‚º" << "(" << pair_path_vec[p].first << "," << pair_path_vec[p].second << ")" << "(" << Selectbit_Index << "," << Switchbit_Index << ")" << "ç™¼ç”Ÿäº¤å‰æ­»è·¯ï¼š" << endl;
 #endif
 						int temp;
 						temp = Selectbit_Index;
@@ -1113,10 +1107,10 @@ int main()
 						repeat_gate_count += 2;
 						gate_count++;
 #if DEBUG
-						cout << "¥Ø«e¦@¦³¡G" << repeat_gate_count << "­Ó­«½ÆªºGates" << endl;
+						cout << "ç›®å‰å…±æœ‰ï¼š" << repeat_gate_count << "å€‹é‡è¤‡çš„Gates" << endl;
 #endif
 
-						Bit_Switch();//¨Ï¥Î¿ï¾Üªº¸ô®|¥æ´«
+						Bit_Switch();//ä½¿ç”¨é¸æ“‡çš„è·¯å¾‘äº¤æ›
 
 						Selectbit_same_neighbor_or_not(pair_dead_path, dead_path_count);
 
@@ -1124,13 +1118,13 @@ int main()
 						if (dead_path_count[Selectbit_Index] >= Dimension)
 						{
 #if DEBUG
-							cout << endl << "¦]Select bit " << Selectbit_Index << " ¥ş³¡³Q¸T§Ò¡A¬GÅıOutput " << Output[Selectbit_Index] << " ª½±µ¦^®a¨ÃÁÙ­ì¡A¨Ï¥Î¤F " << temp_HMD[Selectbit_Index] * 2 - 1 << " ­ÓGates";
+							cout << endl << "å› Select bit " << Selectbit_Index << " å…¨éƒ¨è¢«ç¦å¿Œï¼Œæ•…è®“Output " << Output[Selectbit_Index] << " ç›´æ¥å›å®¶ä¸¦é‚„åŸï¼Œä½¿ç”¨äº† " << temp_HMD[Selectbit_Index] * 2 - 1 << " å€‹Gates";
 # endif
 							Select_bit_home_and_restore(Selectbit_Index, Select_bit_home_gate_count, temp_HMD);
 
-							Clear_Selectbit_Dead_Path(Selectbit_Index, Switchbit_Index, pair_dead_path);//¦]Select bitª½±µ¦^®a¡A§R°£¬ö¿ı¸Óbit¦º¸ôªº¸ô®|
+							Clear_Selectbit_Dead_Path(Selectbit_Index, Switchbit_Index, pair_dead_path);//å› Select bitç›´æ¥å›å®¶ï¼Œåˆªé™¤ç´€éŒ„è©²bitæ­»è·¯çš„è·¯å¾‘
 
-							Clear_Selectbit_Repeat_Dead_Path(Selectbit_Index, Switchbit_Index, repeat_dead_path);//¦]Select bitª½±µ¦^®a¡A§R°£¬ö¿ı¸Óbit­«½Æ¸T§Òªº¸ô®|
+							Clear_Selectbit_Repeat_Dead_Path(Selectbit_Index, Switchbit_Index, repeat_dead_path);//å› Select bitç›´æ¥å›å®¶ï¼Œåˆªé™¤ç´€éŒ„è©²bité‡è¤‡ç¦å¿Œçš„è·¯å¾‘
 
 							Update_Selectbit_Neighbor_Output(pair_path_vec);
 
@@ -1143,13 +1137,13 @@ int main()
 						{
 
 #if DEBUG
-							cout << endl << "¦]Select bit " << Switchbit_Index << " ¥ş³¡³Q¸T§Ò¡A¬GÅıOutput " << Output[Switchbit_Index] << " ª½±µ¦^®a¨ÃÁÙ­ì¡A¨Ï¥Î¤F " << temp_HMD[Switchbit_Index] * 2 - 1 << " ­ÓGates";
+							cout << endl << "å› Select bit " << Switchbit_Index << " å…¨éƒ¨è¢«ç¦å¿Œï¼Œæ•…è®“Output " << Output[Switchbit_Index] << " ç›´æ¥å›å®¶ä¸¦é‚„åŸï¼Œä½¿ç”¨äº† " << temp_HMD[Switchbit_Index] * 2 - 1 << " å€‹Gates";
 # endif
 							Select_bit_home_and_restore(Switchbit_Index, Select_bit_home_gate_count, temp_HMD);
 
-							Clear_Selectbit_Dead_Path(Switchbit_Index, Selectbit_Index, pair_dead_path);//¦]Select bitª½±µ¦^®a¡A§R°£¬ö¿ı¸Óbit¦º¸ôªº¸ô®|
+							Clear_Selectbit_Dead_Path(Switchbit_Index, Selectbit_Index, pair_dead_path);//å› Select bitç›´æ¥å›å®¶ï¼Œåˆªé™¤ç´€éŒ„è©²bitæ­»è·¯çš„è·¯å¾‘
 
-							Clear_Selectbit_Repeat_Dead_Path(Switchbit_Index, Selectbit_Index, repeat_dead_path);//¦]Select bitª½±µ¦^®a¡A§R°£¬ö¿ı¸Óbit­«½Æ¸T§Òªº¸ô®|
+							Clear_Selectbit_Repeat_Dead_Path(Switchbit_Index, Selectbit_Index, repeat_dead_path);//å› Select bitç›´æ¥å›å®¶ï¼Œåˆªé™¤ç´€éŒ„è©²bité‡è¤‡ç¦å¿Œçš„è·¯å¾‘
 
 							Update_Selectbit_Neighbor_Output(pair_path_vec);
 
@@ -1165,15 +1159,15 @@ int main()
 								if (Selectbit_Index == repeat_dead_path[d].first && Switchbit_Index == repeat_dead_path[d].second || Selectbit_Index == repeat_dead_path[d].second && Switchbit_Index == repeat_dead_path[d].first)
 								{
 #if DEBUG
-									cout << endl << "¦]Select bit " << Selectbit_Index << " ­«½Æ³Q¸T§Ò¡A¬GÅıOutput " << Output[Selectbit_Index] << " ª½±µ¦^®a¨ÃÁÙ­ì¡A¨Ï¥Î¤F " << temp_HMD[Selectbit_Index] * 2 - 1 << " ­ÓGates";
+									cout << endl << "å› Select bit " << Selectbit_Index << " é‡è¤‡è¢«ç¦å¿Œï¼Œæ•…è®“Output " << Output[Selectbit_Index] << " ç›´æ¥å›å®¶ä¸¦é‚„åŸï¼Œä½¿ç”¨äº† " << temp_HMD[Selectbit_Index] * 2 - 1 << " å€‹Gates";
 # endif
 									Select_bit_home_and_restore(Selectbit_Index, Select_bit_home_gate_count, temp_HMD);
 
 									dead_path_count[Selectbit_Index] = 0;
 
-									Clear_Selectbit_Dead_Path(Selectbit_Index, Switchbit_Index, pair_dead_path);//¦]Select bitª½±µ¦^®a¡A§R°£¬ö¿ı¸Óbit¦º¸ôªº¸ô®|
+									Clear_Selectbit_Dead_Path(Selectbit_Index, Switchbit_Index, pair_dead_path);//å› Select bitç›´æ¥å›å®¶ï¼Œåˆªé™¤ç´€éŒ„è©²bitæ­»è·¯çš„è·¯å¾‘
 
-									Clear_Selectbit_Repeat_Dead_Path(Selectbit_Index, Switchbit_Index, repeat_dead_path);//¦]Select bitª½±µ¦^®a¡A§R°£¬ö¿ı¸Óbit­«½Æ¸T§Òªº¸ô®|
+									Clear_Selectbit_Repeat_Dead_Path(Selectbit_Index, Switchbit_Index, repeat_dead_path);//å› Select bitç›´æ¥å›å®¶ï¼Œåˆªé™¤ç´€éŒ„è©²bité‡è¤‡ç¦å¿Œçš„è·¯å¾‘
 
 									Update_Selectbit_Neighbor_Output(pair_path_vec);
 
@@ -1184,39 +1178,39 @@ int main()
 							}
 						}
 
-						/*-----------------------------¿é¥X¹q¸ô-----------------------------*/
+						/*-----------------------------è¼¸å‡ºé›»è·¯-----------------------------*/
 #if DEBUG
-	//		             file_out.open("C:\\Users\\NTU\\Desktop\\ppt\\¥i°f¹q¸ô\\¹êÅç¼Æ¾Ú\\Gateªø¬Û.txt", ios::app);
+	                                        // file_out.open("C:\\Users\\NTU\\Desktop\\ppt\\å¯é€†é›»è·¯\\å¯¦é©—æ•¸æ“š\\Gateé•·ç›¸.txt", ios::app);
 
-						cout << endl << "Gateªø¬Û¡G";
+						cout << endl << "Gateé•·ç›¸ï¼š";
 
 						//		file_out << endl;
 						circuit(Selectbit_Index, Switchbit_Index);
 						//	file_out.close();
 #endif
-								/*-----------------------------¿é¥X¹q¸ô-----------------------------*/
+						/*-----------------------------è¼¸å‡ºé›»è·¯-----------------------------*/
 
 #if DEBUG
-						cout << endl << "¥æ´««áªºOutput¡G   ";
+						cout << endl << "äº¤æ›å¾Œçš„Outputï¼š   ";
 
 						for (int i = 0; i < Member; i++)
 						{
-							cout << Output[i] << " ";//¦L¥X¥æ´««áªºOutput
+							cout << Output[i] << " ";//å°å‡ºäº¤æ›å¾Œçš„Output
 						}
 						cout << endl;
 
-						cout << endl << "¥Ø«e¨C­Ó¦ì¸mªºHMD¡G";
+						cout << endl << "ç›®å‰æ¯å€‹ä½ç½®çš„HMDï¼š";
 #endif
 						for (int i = 0; i < Member; i++)
 						{
-							temp_HMD[i] = HMD(Input[i], Output[i]);//¼È¦sHMD
+							temp_HMD[i] = HMD(Input[i], Output[i]);//æš«å­˜HMD
 #if DEBUG
-							cout << temp_HMD[i] << " ";//¿é¥X¥Ø«e¨C­Ó¦ì¸mªºHMD
+							cout << temp_HMD[i] << " ";//è¼¸å‡ºç›®å‰æ¯å€‹ä½ç½®çš„HMD
 #endif
 						}
 						if (Select_home == false)
 						{
-							repeat_dead_path.push_back(make_pair(Selectbit_Index, Switchbit_Index));//¦s²Ä¤@¦¸µo¥Í¦º¸ôªº¸ô®|
+							repeat_dead_path.push_back(make_pair(Selectbit_Index, Switchbit_Index));//å­˜ç¬¬ä¸€æ¬¡ç™¼ç”Ÿæ­»è·¯çš„è·¯å¾‘
 						}
 						pair_path_vec.erase(pair_path_vec.begin() + p);
 						output_vec[Selectbit_Index].pop_back();
@@ -1225,46 +1219,46 @@ int main()
 						goto Goto;
 					}
 
-					else if (Selectbit_Index == pair_path_vec[p].first && Switchbit_Index == pair_path_vec[p].second)//¥­¦æ¦º¸ô
+					else if (Selectbit_Index == pair_path_vec[p].first && Switchbit_Index == pair_path_vec[p].second)//å¹³è¡Œæ­»è·¯
 					{
 #if DEBUG
-						cout << endl << "¥Ø«e­n¥æ´«ªºSwitch Bit¸ô®|¡G" << Switchbit_Index << endl;
-						cout << "²Ä" << n++ << "¦¸¿ï¾Üªº¸ô®|¦ì¸m¡G(" << Selectbit_Index << "," << Switchbit_Index << ")" << endl;
-						cout << "¦]¬°" << "(" << pair_path_vec[p].first << "," << pair_path_vec[p].second << ")" << "(" << Selectbit_Index << "," << Switchbit_Index << ")" << "µo¥Í¥­¦æ¦º¸ô¡G" << endl;
+						cout << endl << "ç›®å‰è¦äº¤æ›çš„Switch Bitè·¯å¾‘ï¼š" << Switchbit_Index << endl;
+						cout << "ç¬¬" << n++ << "æ¬¡é¸æ“‡çš„è·¯å¾‘ä½ç½®ï¼š(" << Selectbit_Index << "," << Switchbit_Index << ")" << endl;
+						cout << "å› ç‚º" << "(" << pair_path_vec[p].first << "," << pair_path_vec[p].second << ")" << "(" << Selectbit_Index << "," << Switchbit_Index << ")" << "ç™¼ç”Ÿå¹³è¡Œæ­»è·¯ï¼š" << endl;
 #endif
 						repeat_gate_count += 2;
 						gate_count++;
 #if DEBUG
-						cout << "¥Ø«e¦@¦³¡G" << repeat_gate_count << "­Ó­«½ÆªºGates" << endl;
+						cout << "ç›®å‰å…±æœ‰ï¼š" << repeat_gate_count << "å€‹é‡è¤‡çš„Gates" << endl;
 #endif
 
-						Bit_Switch();//¨Ï¥Î¿ï¾Üªº¸ô®|¥æ´«
+						Bit_Switch();//ä½¿ç”¨é¸æ“‡çš„è·¯å¾‘äº¤æ›
 
-						/*-----------------------------¿é¥X¹q¸ô-----------------------------*/
-						/*file_out.open("C:\\Users\\NTU\\Desktop\\¤p¥Õ_¥i°f¹q¸ô\\¥i°f¹q¸ô¹êÅç¼Æ¾Ú\\Gateªø¬Û.txt", ios::app);
+						/*-----------------------------è¼¸å‡ºé›»è·¯-----------------------------*/
+						/*file_out.open("C:\\Users\\NTU\\Desktop\\å°ç™½_å¯é€†é›»è·¯\\å¯é€†é›»è·¯å¯¦é©—æ•¸æ“š\\Gateé•·ç›¸.txt", ios::app);
 
 
-						//	cout << endl << "Gateªø¬Û¡G";
+						//	cout << endl << "Gateé•·ç›¸ï¼š";
 
 						file_out << endl;
 
 						circuit(Selectbit_Index, Switchbit_Index);
 
 						file_out.close();*/
-						/*-----------------------------¿é¥X¹q¸ô-----------------------------*/
+						/*-----------------------------è¼¸å‡ºé›»è·¯-----------------------------*/
 
 						Selectbit_same_neighbor_or_not(pair_dead_path, dead_path_count);
 
 						if (dead_path_count[Selectbit_Index] >= Dimension)
 						{
 #if DEBUG
-							cout << endl << "¦]Select bit " << Selectbit_Index << " ¥ş³¡³Q¸T§Ò¡A¬GÅıOutput " << Output[Selectbit_Index] << " ª½±µ¦^®a¨ÃÁÙ­ì¡A¨Ï¥Î¤F " << temp_HMD[Selectbit_Index] * 2 - 1 << " ­ÓGates";
+							cout << endl << "å› Select bit " << Selectbit_Index << " å…¨éƒ¨è¢«ç¦å¿Œï¼Œæ•…è®“Output " << Output[Selectbit_Index] << " ç›´æ¥å›å®¶ä¸¦é‚„åŸï¼Œä½¿ç”¨äº† " << temp_HMD[Selectbit_Index] * 2 - 1 << " å€‹Gates";
 # endif
 							Select_bit_home_and_restore(Selectbit_Index, Select_bit_home_gate_count, temp_HMD);
 
-							Clear_Selectbit_Dead_Path(Selectbit_Index, Switchbit_Index, pair_dead_path);//¦]Select bitª½±µ¦^®a¡A§R°£¬ö¿ı¸Óbit¦º¸ôªº¸ô®|
+							Clear_Selectbit_Dead_Path(Selectbit_Index, Switchbit_Index, pair_dead_path);//å› Select bitç›´æ¥å›å®¶ï¼Œåˆªé™¤ç´€éŒ„è©²bitæ­»è·¯çš„è·¯å¾‘
 
-							Clear_Selectbit_Repeat_Dead_Path(Selectbit_Index, Switchbit_Index, repeat_dead_path);//¦]Select bitª½±µ¦^®a¡A§R°£¬ö¿ı¸Óbit­«½Æ¸T§Òªº¸ô®|
+							Clear_Selectbit_Repeat_Dead_Path(Selectbit_Index, Switchbit_Index, repeat_dead_path);//å› Select bitç›´æ¥å›å®¶ï¼Œåˆªé™¤ç´€éŒ„è©²bité‡è¤‡ç¦å¿Œçš„è·¯å¾‘
 
 							Update_Selectbit_Neighbor_Output(pair_path_vec);
 
@@ -1278,13 +1272,13 @@ int main()
 						{
 
 #if DEBUG
-							cout << endl << "¦]Select bit " << Switchbit_Index << " ¥ş³¡³Q¸T§Ò¡A¬GÅıOutput " << Output[Switchbit_Index] << " ª½±µ¦^®a¨ÃÁÙ­ì¡A¨Ï¥Î¤F " << temp_HMD[Switchbit_Index] * 2 - 1 << " ­ÓGates";
+							cout << endl << "å› Select bit " << Switchbit_Index << " å…¨éƒ¨è¢«ç¦å¿Œï¼Œæ•…è®“Output " << Output[Switchbit_Index] << " ç›´æ¥å›å®¶ä¸¦é‚„åŸï¼Œä½¿ç”¨äº† " << temp_HMD[Switchbit_Index] * 2 - 1 << " å€‹Gates";
 # endif
 							Select_bit_home_and_restore(Switchbit_Index, Select_bit_home_gate_count, temp_HMD);
 
-							Clear_Selectbit_Dead_Path(Switchbit_Index, Selectbit_Index, pair_dead_path);//¦]Select bitª½±µ¦^®a¡A§R°£¬ö¿ı¸Óbit¦º¸ôªº¸ô®|
+							Clear_Selectbit_Dead_Path(Switchbit_Index, Selectbit_Index, pair_dead_path);//å› Select bitç›´æ¥å›å®¶ï¼Œåˆªé™¤ç´€éŒ„è©²bitæ­»è·¯çš„è·¯å¾‘
 
-							Clear_Selectbit_Repeat_Dead_Path(Switchbit_Index, Selectbit_Index, repeat_dead_path);//¦]Select bitª½±µ¦^®a¡A§R°£¬ö¿ı¸Óbit­«½Æ¸T§Òªº¸ô®|
+							Clear_Selectbit_Repeat_Dead_Path(Switchbit_Index, Selectbit_Index, repeat_dead_path);//å› Select bitç›´æ¥å›å®¶ï¼Œåˆªé™¤ç´€éŒ„è©²bité‡è¤‡ç¦å¿Œçš„è·¯å¾‘
 
 							Update_Selectbit_Neighbor_Output(pair_path_vec);
 
@@ -1299,15 +1293,15 @@ int main()
 								if (Selectbit_Index == repeat_dead_path[d].first && Switchbit_Index == repeat_dead_path[d].second || Selectbit_Index == repeat_dead_path[d].second && Switchbit_Index == repeat_dead_path[d].first)
 								{
 #if DEBUG
-									cout << endl << "¦]Select bit " << Selectbit_Index << " ­«½Æ³Q¸T§Ò¡A¬GÅıOutput " << Output[Selectbit_Index] << " ª½±µ¦^®a¨ÃÁÙ­ì¡A¨Ï¥Î¤F " << temp_HMD[Selectbit_Index] * 2 - 1 << " ­ÓGates";
+									cout << endl << "å› Select bit " << Selectbit_Index << " é‡è¤‡è¢«ç¦å¿Œï¼Œæ•…è®“Output " << Output[Selectbit_Index] << " ç›´æ¥å›å®¶ä¸¦é‚„åŸï¼Œä½¿ç”¨äº† " << temp_HMD[Selectbit_Index] * 2 - 1 << " å€‹Gates";
 # endif
 									Select_bit_home_and_restore(Selectbit_Index, Select_bit_home_gate_count, temp_HMD);
 
 									dead_path_count[Selectbit_Index] = 0;
 
-									Clear_Selectbit_Dead_Path(Selectbit_Index, Switchbit_Index, pair_dead_path);//¦]Select bitª½±µ¦^®a¡A§R°£¬ö¿ı¸Óbit¦º¸ôªº¸ô®|
+									Clear_Selectbit_Dead_Path(Selectbit_Index, Switchbit_Index, pair_dead_path);//å› Select bitç›´æ¥å›å®¶ï¼Œåˆªé™¤ç´€éŒ„è©²bitæ­»è·¯çš„è·¯å¾‘
 
-									Clear_Selectbit_Repeat_Dead_Path(Selectbit_Index, Switchbit_Index, repeat_dead_path);//¦]Select bitª½±µ¦^®a¡A§R°£¬ö¿ı¸Óbit­«½Æ¸T§Òªº¸ô®|
+									Clear_Selectbit_Repeat_Dead_Path(Selectbit_Index, Switchbit_Index, repeat_dead_path);//å› Select bitç›´æ¥å›å®¶ï¼Œåˆªé™¤ç´€éŒ„è©²bité‡è¤‡ç¦å¿Œçš„è·¯å¾‘
 
 									Update_Selectbit_Neighbor_Output(pair_path_vec);
 
@@ -1318,40 +1312,40 @@ int main()
 							}
 						}
 
-						/*-----------------------------¿é¥X¹q¸ô-----------------------------*/
+						/*-----------------------------è¼¸å‡ºé›»è·¯-----------------------------*/
 #if DEBUG
-	//		             file_out.open("C:\\Users\\NTU\\Desktop\\ppt\\¥i°f¹q¸ô\\¹êÅç¼Æ¾Ú\\Gateªø¬Û.txt", ios::app);
+			                    //  file_out.open("C:\\Users\\NTU\\Desktop\\ppt\\å¯é€†é›»è·¯\\å¯¦é©—æ•¸æ“š\\Gateé•·ç›¸.txt", ios::app);
 
-						cout << endl << "Gateªø¬Û¡G";
+						cout << endl << "Gateé•·ç›¸ï¼š";
 
 						//		file_out << endl;
 						circuit(Selectbit_Index, Switchbit_Index);
 						//	file_out.close();
 #endif
-								/*-----------------------------¿é¥X¹q¸ô-----------------------------*/
+						/*-----------------------------è¼¸å‡ºé›»è·¯-----------------------------*/
 
 #if DEBUG
-						cout << endl << "¥æ´««áªºOutput¡G   ";
+						cout << endl << "äº¤æ›å¾Œçš„Outputï¼š   ";
 
 						for (int i = 0; i < Member; i++)
 						{
-							cout << Output[i] << " ";//¦L¥X¥æ´««áªºOutput
+							cout << Output[i] << " ";//å°å‡ºäº¤æ›å¾Œçš„Output
 						}
 						cout << endl;
 
-						cout << endl << "¥Ø«e¨C­Ó¦ì¸mªºHMD¡G";
+						cout << endl << "ç›®å‰æ¯å€‹ä½ç½®çš„HMDï¼š";
 #endif
 						for (int i = 0; i < Member; i++)
 						{
-							temp_HMD[i] = HMD(Input[i], Output[i]);//¼È¦sHMD
+							temp_HMD[i] = HMD(Input[i], Output[i]);//æš«å­˜HMD
 #if DEBUG
-							cout << temp_HMD[i] << " ";//¿é¥X¥Ø«e¨C­Ó¦ì¸mªºHMD
+							cout << temp_HMD[i] << " ";//è¼¸å‡ºç›®å‰æ¯å€‹ä½ç½®çš„HMD
 #endif
 						}
 
 						if (Select_home == false)
 						{
-							repeat_dead_path.push_back(make_pair(Selectbit_Index, Switchbit_Index));//¦s²Ä¤@¦¸µo¥Í¦º¸ôªº¸ô®|
+							repeat_dead_path.push_back(make_pair(Selectbit_Index, Switchbit_Index));//å­˜ç¬¬ä¸€æ¬¡ç™¼ç”Ÿæ­»è·¯çš„è·¯å¾‘
 						}
 
 						pair_path_vec.erase(pair_path_vec.begin() + p);
@@ -1365,15 +1359,15 @@ int main()
 			}
 		}
 
-		/*----------------------------------------------------------§PÂ_¬O§_¦º¸ô-------------------------------------------------------------------------*/
+		/*----------------------------------------------------------åˆ¤æ–·æ˜¯å¦æ­»è·¯-------------------------------------------------------------------------*/
 #if DEBUG
-		cout << endl << "¥Ø«e­n»PSwitch Bit¥æ´«ªº¸ô®|¡G" << Switchbit_Index;
-		cout << endl << "²Ä" << n++ << "¦¸¿ï¾Üªº¸ô®|¦ì¸m¡G(" << Selectbit_Index << "," << Switchbit_Index << ")" << endl;
-		cout << "¥Ø«e¦@¦³¡G" << repeat_gate_count << "­Ó­«½ÆªºGates" << endl;
+		cout << endl << "ç›®å‰è¦èˆ‡Switch Bitäº¤æ›çš„è·¯å¾‘ï¼š" << Switchbit_Index;
+		cout << endl << "ç¬¬" << n++ << "æ¬¡é¸æ“‡çš„è·¯å¾‘ä½ç½®ï¼š(" << Selectbit_Index << "," << Switchbit_Index << ")" << endl;
+		cout << "ç›®å‰å…±æœ‰ï¼š" << repeat_gate_count << "å€‹é‡è¤‡çš„Gates" << endl;
 #endif
-		pair_path_vec.push_back(make_pair(Selectbit_Index, Switchbit_Index));//¦s¤W¦¸ªº¸ô®|
-		output_vec[Selectbit_Index].push_back(Output[Selectbit_Index]);//¦s¤W¦¸ªº¸ô®|ªºOutput
-		output_vec[Switchbit_Index].push_back(Output[Switchbit_Index]);//¦s¤W¦¸ªº¸ô®|ªºOutput
+		pair_path_vec.push_back(make_pair(Selectbit_Index, Switchbit_Index));//å­˜ä¸Šæ¬¡çš„è·¯å¾‘
+		output_vec[Selectbit_Index].push_back(Output[Selectbit_Index]);//å­˜ä¸Šæ¬¡çš„è·¯å¾‘çš„Output
+		output_vec[Switchbit_Index].push_back(Output[Switchbit_Index]);//å­˜ä¸Šæ¬¡çš„è·¯å¾‘çš„Output
 
 		if (Not_Only_MaxHMD == false)
 		{
@@ -1384,12 +1378,12 @@ int main()
 			for (unsigned int i = 0; i < max_HMD_count; i++)
 			{
 #if DEBUG
-				cout << "¥æ´««eSelect bit " << max_HMD_index[i] << "¦Û¤v»P¾F©~¤WªºOutput¡G";
+				cout << "äº¤æ›å‰Select bit " << max_HMD_index[i] << "è‡ªå·±èˆ‡é„°å±…ä¸Šçš„Outputï¼š";
 #endif
 
 				for (unsigned int j = 0; j < Dimension + 1; j++)
 				{
-					Selectbit_Neighbor_Output[max_HMD_index[i]][j] = Output[AHD_Neighbor[max_HMD_index[i]][j]];//¥Ø«e¿ï¾ÜSwitch bit¾F©~¤WªºOutput
+					Selectbit_Neighbor_Output[max_HMD_index[i]][j] = Output[AHD_Neighbor[max_HMD_index[i]][j]];//ç›®å‰é¸æ“‡Switch bité„°å±…ä¸Šçš„Output
 				}
 
 
@@ -1405,45 +1399,45 @@ int main()
 			}
 		}
 
-		Bit_Switch();//¨Ï¥Î¿ï¾Üªº¸ô®|¥æ´«
+		Bit_Switch();//ä½¿ç”¨é¸æ“‡çš„è·¯å¾‘äº¤æ›
 
-	/*-----------------------------¿é¥X¹q¸ô-----------------------------*/
+	        /*-----------------------------è¼¸å‡ºé›»è·¯-----------------------------*/
 	/*	if (temp_HMD[Selectbit_Index] != 0)
 		{
-			file_out.open("C:\\Users\\NTU\\Desktop\\¤p¥Õ_¥i°f¹q¸ô\\¥i°f¹q¸ô¹êÅç¼Æ¾Ú\\Gateªø¬Û.txt", ios::app);
-		//	cout << endl << "Gateªø¬Û¡G";
+			file_out.open("C:\\Users\\NTU\\Desktop\\å°ç™½_å¯é€†é›»è·¯\\å¯é€†é›»è·¯å¯¦é©—æ•¸æ“š\\Gateé•·ç›¸.txt", ios::app);
+		//	cout << endl << "Gateé•·ç›¸ï¼š";
 			file_out << endl;
 			circuit(Selectbit_Index, Switchbit_Index);
 			file_out.close();
 		}*/
-		/*-----------------------------¿é¥X¹q¸ô-----------------------------*/
+		/*-----------------------------è¼¸å‡ºé›»è·¯-----------------------------*/
 
 #if DEBUG
-		cout << endl << "¥æ´««áªºOutput¡G   ";
+		cout << endl << "äº¤æ›å¾Œçš„Outputï¼š   ";
 		for (int i = 0; i < Member; i++)
 		{
-			cout << Output[i] << " ";//¦L¥X¥æ´««áªºOutput
+			cout << Output[i] << " ";//å°å‡ºäº¤æ›å¾Œçš„Output
 		}
 #endif
 #if DEBUG
-		cout << endl << "¥Ø«e¨C­Ó¦ì¸mªºHMD¡G";
+		cout << endl << "ç›®å‰æ¯å€‹ä½ç½®çš„HMDï¼š";
 #endif
 		for (int i = 0; i < Member; i++)
 		{
-			temp_HMD[i] = HMD(Input[i], Output[i]);//¼È¦sHMD
+			temp_HMD[i] = HMD(Input[i], Output[i]);//æš«å­˜HMD
 #if DEBUG
-			cout << temp_HMD[i] << " ";//¿é¥X¥Ø«e¨C­Ó¦ì¸mªºHMD
+			cout << temp_HMD[i] << " ";//è¼¸å‡ºç›®å‰æ¯å€‹ä½ç½®çš„HMD
 #endif
 		}
 		gate_count++;
 	}
 	best_gate_count = gate_count - repeat_gate_count + Select_bit_home_gate_count;
 	auto End = chrono::steady_clock::now();
-	cout << endl << "Á`¦@¨Ï¥Î¡G" << gate_count + Select_bit_home_gate_count << "­ÓGates";
-	cout << endl << "¹J¨ì¦º¸ôª½±µ¦^®a¡G" << Select_bit_home_gate_count << "­ÓGates";
-	cout << endl << "¦@¦³¡G" << repeat_gate_count << "­Ó­«½ÆªºGates";
-	cout << endl << "³Ì¨Î¸Ñ¬°¡G" << best_gate_count << "­ÓGates" << endl;
-	cout << endl << "¶i¦æ¹Bºâ©Òªá¶Oªº®É¶¡¡G" << chrono::duration_cast<chrono::nanoseconds>(End - Start).count() << " ns" << endl;
+	cout << endl << "ç¸½å…±ä½¿ç”¨ï¼š" << gate_count + Select_bit_home_gate_count << "å€‹Gates";
+	cout << endl << "é‡åˆ°æ­»è·¯ç›´æ¥å›å®¶ï¼š" << Select_bit_home_gate_count << "å€‹Gates";
+	cout << endl << "å…±æœ‰ï¼š" << repeat_gate_count << "å€‹é‡è¤‡çš„Gates";
+	cout << endl << "æœ€ä½³è§£ç‚ºï¼š" << best_gate_count << "å€‹Gates" << endl;
+	cout << endl << "é€²è¡Œé‹ç®—æ‰€èŠ±è²»çš„æ™‚é–“ï¼š" << chrono::duration_cast<chrono::nanoseconds>(End - Start).count() << " ns" << endl;
 	cout << endl << "----------------------------------------------" << endl;
 	return 0;
 }
